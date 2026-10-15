@@ -16,7 +16,26 @@
   <meta http-equiv="X-Frame-Options" content="DENY" />
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; img-src 'self' data: https:; connect-src 'self' https://zurai02.is-a.dev; frame-src https://zurai02.is-a.dev;" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsa[...]"/>
+
+  <!-- Canonical host redirect: silently redirect to zurai02.is-a.dev if visited from any other host -->
+  <script>
+    (function() {
+      const PRIMARY_HOST = 'zurai02.is-a.dev';
+      if (typeof window === 'undefined' || !window.location) return;
+      try {
+        const host = window.location.hostname;
+        if (host !== PRIMARY_HOST) {
+          const dest = 'https://' + PRIMARY_HOST + window.location.pathname + window.location.search + window.location.hash;
+          // Use replace so this doesn't create a history entry
+          window.location.replace(dest);
+        }
+      } catch (e) {
+        // Fail silently
+        console.warn('Host redirect check failed', e);
+      }
+    })();
+  </script>
 
   <!-- Open Graph -->
   <meta property="og:title" content="zurai02 — Roblox Scripting Specialist" />
@@ -267,7 +286,7 @@
           <span class="stat-lbl">% client-side focus</span>
         </div>
       </div>
-     <a href="https://rscripts.net/user/zurai02" target="_blank"><img alt="zurai02 on Rscripts" loading="lazy" width="360" height="132" src="https://rscripts.net/api/embed/user/zurai02?theme=dark" /></a>
+     <a href="https://rscripts.net/user/zurai02" target="_blank"><img alt="zurai02 on Rscripts" loading="lazy" width="360" height="132" src="https://rscripts.net/api/embed/user/zurai02?theme=dark[...]" aria-hidden="true"/></a>
       <aside class="verify-block reveal rd3">
         <p>
           <strong>Verification</strong> — Contact via Discord:
