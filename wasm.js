@@ -14,12 +14,44 @@ const WasmEngine = (() => {
   const rand     = (mn, mx) => mn + Math.random() * (mx - mn);
   const randSign = ()        => Math.random() < 0.5 ? 1 : -1;
 
+  // Load order: Rust build (pkg/) -> engine.wasm (built from engine.wat) -> plain JS.
+  // Whichever loads first becomes `engine`; all of them share one interface:
+  //   set_particle, update(w,h,dt), get_x/get_y/get_alpha/get_size, connection_alpha
   async function loadWasm() {
+    // 1) Rust / wasm-bindgen build, used automatically if pkg/ has been built
     try {
       const mod = await import("./pkg/particle_engine.js");
       await mod.default();
       engine = new mod.ParticleEngine(PARTICLE_COUNT);
       console.log("[wasm] Rust engine loaded.");
+      return;
+    } catch (err) {
+      console.info("[wasm] Rust build (pkg/) not found, trying engine.wasm.");
+    }
+
+    // 2) Hand-written WebAssembly (engine.wasm, compiled from engine.wat)
+    try {
+      let result;
+      try {
+        result = await WebAssembly.instantiateStreaming(fetch("engine.wasm"));
+      } catch (streamErr) {
+        // wrong MIME type or no streaming support: fall back to ArrayBuffer
+        const res = await fetch("engine.wasm");
+        if (!res.ok) throw new Error("engine.wasm HTTP " + res.status);
+        result = await WebAssembly.instantiate(await res.arrayBuffer());
+      }
+      const x = result.instance.exports;
+      engine = {
+        set_particle:     x.set_particle,
+        update:           (w, h, dt) => x.update_particles(PARTICLE_COUNT, w, h, dt),
+        get_x:            x.get_x,
+        get_y:            x.get_y,
+        get_alpha:        x.get_alpha,
+        get_size:         x.get_size,
+        connection_alpha: x.connection_alpha,
+      };
+      console.log("[wasm] engine.wasm loaded: particle engine running natively.");
+      return;
     } catch (err) {
       console.warn("[wasm] fallback to JS.", err);
       engine = null;
