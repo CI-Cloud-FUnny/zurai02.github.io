@@ -49,7 +49,27 @@
   }
 
   // ── Spawn burst ────────────────────────────────────────────────────────────
+  // The overlay canvas is only shown while a burst is playing. A permanent
+  // full-screen canvas on top of the page costs GPU time on phones for nothing.
+  let layerOn = false;
+  function showLayer() {
+    // size it now (not on every resize event): assigning width clears the canvas
+    // and fires constantly while the mobile address bar slides in and out
+    if (canvas.width !== window.innerWidth || canvas.height !== window.innerHeight) {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    if (!layerOn) { canvas.style.display = "block"; layerOn = true; }
+  }
+  function hideLayer() {
+    if (!layerOn) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.style.display = "none";
+    layerOn = false;
+  }
+
   function spawnBurst(x, y) {
+    showLayer();
     for (let i = 0; i < BURST_COUNT; i++) {
       bursts.push(new TapParticle(x, y));
     }
@@ -73,7 +93,7 @@
 
   function loop(now) {
     requestAnimationFrame(loop);
-    if (!bursts.length) return;
+    if (!bursts.length) { hideLayer(); return; }
 
     // Only clear/redraw the tap layer if there are active particles.
     // We draw on top of the existing bg-canvas (bg particles are drawn first by wasm.js).
@@ -104,6 +124,7 @@
       height: 100%;
       pointer-events: none;
       z-index: 9999;
+      display: none;
     `;
     overlay.width  = window.innerWidth;
     overlay.height = window.innerHeight;
@@ -112,10 +133,7 @@
     canvas = overlay;
     ctx    = canvas.getContext("2d");
 
-    window.addEventListener("resize", () => {
-      canvas.width  = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
+    // (no resize listener: the canvas is resized lazily in showLayer())
 
     // Tap + click
     window.addEventListener("pointerdown", e => {
