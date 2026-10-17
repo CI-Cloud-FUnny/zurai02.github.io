@@ -11,7 +11,7 @@
 'use strict';
 
 const CACHE_NAME    = 'zurai02-v1';
-const SHELL_CACHE   = 'zurai02-shell-v2';
+const SHELL_CACHE   = 'zurai02-shell-v3';
 const FONT_CACHE    = 'zurai02-fonts-v1';
 
 /* Files to precache on install */
