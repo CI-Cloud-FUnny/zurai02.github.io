@@ -1342,3 +1342,29 @@ footer a:hover {
   .zc-panel, .zc-msg, .zc-tdot { animation: none; }
   .zc-toggle, .zc-log { transition: none; scroll-behavior: auto; }
 }
+
+
+/* ═══════════════════════════════════════════════════════════
+   PERFORMANCE — lighter glass on phones / touch screens
+   The particle canvas animates behind every glass element, and each
+   backdrop-filter has to re-blur what is behind it on every frame. These
+   panels are already nearly opaque, so on touch devices the blur is dropped
+   and the background made a little more solid. Desktop is unchanged.
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px), (pointer: coarse) {
+  nav.scrolled,
+  .skill-card,
+  .link-card,
+  .verify-block,
+  .tw-terminal,
+  #copy-toast,
+  .zc-panel {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  nav.scrolled { background: rgba(7, 9, 14, 0.97); }
+  .skill-card  { background: rgba(13, 18, 25, 0.92); }
+  .link-card   { background: rgba(13, 18, 25, 0.90); }
+  .tw-terminal { background: rgba(5, 8, 12, 0.96); }
+  .zc-panel    { background: rgba(13, 18, 25, 0.98); }
+}
