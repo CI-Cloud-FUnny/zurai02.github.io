@@ -1,0 +1,12 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Redirecting…</title>
+<script>
+  const name = location.pathname.split("/").filter(Boolean)[0] || "";
+  if (/^[A-Za-z0-9._-]+$/.test(name)) {
+    location.replace("https://github.com/zurai02/" + name);
+  } else {
+    location.replace("/");
+  }
+</script>
+<p>Redirecting… <a href="/">Go home</a></p>
