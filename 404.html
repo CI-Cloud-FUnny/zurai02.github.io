@@ -1,12 +1,57 @@
 <!doctype html>
+<html lang="en">
+<head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Redirecting…</title>
+<style>
+  body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0d1117;color:#e6edf3;font:16px/1.5 system-ui,sans-serif;text-align:center;padding:16px}
+  a{color:#58a6ff}
+  .box{max-width:420px}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1 id="title">Redirecting…</h1>
+  <p id="msg">One moment.</p>
+  <p><a href="/">Go home</a></p>
+</div>
 <script>
-  const name = location.pathname.split("/").filter(Boolean)[0] || "";
-  if (/^[A-Za-z0-9._-]+$/.test(name)) {
-    location.replace("https://github.com/zurai02/" + name);
-  } else {
-    location.replace("/");
+(function () {
+  var USER = "zurai02";
+  var title = document.getElementById("title");
+  var msg = document.getElementById("msg");
+  function show(t, m) { title.textContent = t; msg.textContent = m; }
+  function go(name) { location.replace("https://github.com/" + USER + "/" + name); }
+
+  // Only a single clean segment like /luazi counts as a repo name
+  var parts = location.pathname.split("/").filter(Boolean);
+  if (parts.length !== 1 || !/^[A-Za-z0-9._-]+$/.test(parts[0])) {
+    show("404", "That page doesn't exist.");
+    return;
   }
+  var name = parts[0];
+
+  fetch("https://api.github.com/repos/" + USER + "/" + encodeURIComponent(name))
+    .then(function (r) {
+      if (r.status === 404) {
+        show("Not found", "There's no public repo called " + name + ".");
+        return null;
+      }
+      if (!r.ok) { go(name); return null; } // rate limit or error: fall back
+      return r.json();
+    })
+    .then(function (repo) {
+      if (!repo) return;
+      if (repo.has_pages) {
+        // The repo has its own site, so don't hijack it
+        show("Site unavailable", name + " has its own site, but it isn't loading right now.");
+        return;
+      }
+      go(name);
+    })
+    .catch(function () { go(name); });
+})();
 </script>
-<p>Redirecting… <a href="/">Go home</a></p>
+</body>
+</html>
