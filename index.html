@@ -15,26 +15,6 @@
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://zurai02.is-a.dev https://*.zurai02.is-a.dev; img-src 'self' data: https:; media-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self';" />
-
-  <!-- Canonical host redirect: silently redirect to zurai02.is-a.dev if visited from any other host -->
-  <script>
-    (function() {
-      const PRIMARY_HOST = 'zurai02.is-a.dev';
-      if (typeof window === 'undefined' || !window.location) return;
-      try {
-        const host = window.location.hostname;
-        if (host !== PRIMARY_HOST) {
-          const dest = 'https://' + PRIMARY_HOST + window.location.pathname + window.location.search + window.location.hash;
-          // Use replace so this doesn't create a history entry
-          window.location.replace(dest);
-        }
-      } catch (e) {
-        // Fail silently
-        console.warn('Host redirect check failed', e);
-      }
-    })();
-  </script>
-
   <!-- Open Graph -->
   <meta property="og:title" content="zurai02 — Roblox Scripting Specialist" />
   <meta property="og:description" content="Advanced client-side architecture and custom Luau modules that push Roblox performance to the limit." />
