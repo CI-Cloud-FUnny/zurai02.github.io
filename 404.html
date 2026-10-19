@@ -13,6 +13,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
+  <!-- Canonical host redirect (synchronous, root-relative so it works at any 404 path) -->
+  <script src="/redirect.js"></script>
+
   <!-- Shared styles (root-relative so this works at any 404 path) -->
   <link rel="stylesheet" href="/style.css" />
 </head>
@@ -53,7 +56,9 @@
     </main>
   </noscript>
 
-  <!-- Shared script; runs initNotFound() because body has .page-404 -->
+  <!-- Shared script, compiled from site.ts (npx tsc --project tsconfig.json).
+       Runs initNotFound() because body has .page-404.
+       If your tsconfig outputs somewhere other than the site root, change this path (e.g. /dist/site.js). -->
   <script src="/site.js" defer></script>
 </body>
 </html>
