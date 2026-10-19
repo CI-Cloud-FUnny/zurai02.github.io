@@ -1,6 +1,4 @@
-//redirect.js
-
-
+// redirect.js
 
 (function() {
   'use strict';
