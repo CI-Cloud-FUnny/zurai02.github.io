@@ -32,15 +32,15 @@
       position: relative;
     }
 
-    /* Background glow matching the hero of zurai02.is-a.dev */
+    /* Ambient background glow */
     .bg-glow {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(255, 107, 53, 0.12) 0%, rgba(255, 107, 53, 0) 70%);
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, rgba(255, 107, 53, 0.14) 0%, rgba(255, 107, 53, 0) 70%);
       pointer-events: none;
       z-index: 0;
     }
@@ -56,15 +56,15 @@
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 16px;
-      padding: 32px 28px;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+      padding: 34px 30px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
       animation: fadeIn 0.3s ease-out forwards;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -78,7 +78,7 @@
     .tag-error {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
       background: rgba(255, 107, 53, 0.12);
       border: 1px solid rgba(255, 107, 53, 0.3);
       color: #ff6b35;
@@ -95,23 +95,29 @@
       height: 6px;
       background: #ff6b35;
       border-radius: 50%;
-      box-shadow: 0 0 8px #ff6b35;
+      box-shadow: 0 0 10px #ff6b35;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
     }
 
     h1 {
-      font-size: 1.5rem;
+      font-size: 1.55rem;
       font-weight: 700;
       color: #ffffff;
       line-height: 1.3;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       letter-spacing: -0.02em;
     }
 
     p {
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255, 255, 255, 0.65);
       font-size: 0.95rem;
       line-height: 1.6;
-      margin-bottom: 24px;
+      margin-bottom: 26px;
       overflow-wrap: anywhere;
     }
 
@@ -119,55 +125,79 @@
       color: #ff6b35;
       font-family: 'JetBrains Mono', monospace;
       background: rgba(255, 107, 53, 0.08);
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: 4px;
-      border: 1px solid rgba(255, 107, 53, 0.2);
+      border: 1px solid rgba(255, 107, 53, 0.25);
     }
 
     .actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      padding-top: 20px;
+      align-items: center;
+      gap: 14px;
+      padding-top: 22px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
+    /* Interactive button styles */
     .btn {
+      position: relative;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 18px;
-      border-radius: 8px;
+      padding: 11px 20px;
+      border-radius: 10px;
       font-size: 0.88rem;
       font-weight: 600;
       text-decoration: none;
-      transition: all 0.2s ease;
       cursor: pointer;
+      user-select: none;
+      will-change: transform;
+      /* Fast transition during mousemove, smooth elastic snapback on mouseleave */
+      transition: transform 0.12s ease-out, box-shadow 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+    }
+
+    .btn.snapping {
+      transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2), box-shadow 0.25s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.96) !important;
+    }
+
+    .btn-arrow {
+      display: inline-block;
+      transition: transform 0.25s ease;
+    }
+
+    .btn:hover .btn-arrow {
+      transform: translateX(3px);
     }
 
     .btn-primary {
       background: #ff6b35;
       color: #ffffff;
-      box-shadow: 0 4px 14px rgba(255, 107, 53, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 18px rgba(255, 107, 53, 0.35);
     }
 
     .btn-primary:hover {
-      background: #ff7e4f;
-      box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
-      transform: translateY(-1px);
+      background: #ff7c4a;
+      box-shadow: 0 8px 28px rgba(255, 107, 53, 0.55), 0 0 16px rgba(255, 107, 53, 0.4);
     }
 
     .btn-ghost {
       background: rgba(255, 255, 255, 0.04);
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .btn-ghost:hover {
       background: rgba(255, 255, 255, 0.08);
       color: #ffffff;
-      border-color: rgba(255, 107, 53, 0.3);
-      transform: translateY(-1px);
+      border-color: rgba(255, 107, 53, 0.4);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), 0 0 12px rgba(255, 107, 53, 0.15);
     }
   </style>
 </head>
@@ -175,7 +205,7 @@
 
   <div class="bg-glow" aria-hidden="true"></div>
 
-  <!-- Hidden while querying GitHub API, only displays if repo does not exist -->
+  <!-- Hidden while validating repo existence -->
   <main class="card" id="card" hidden>
     <div class="badge-row">
       <span class="tag-error">
@@ -186,10 +216,10 @@
     <h1 id="title">Repository Not Found</h1>
     <p id="msg"></p>
     <div class="actions">
-      <a href="https://github.com/zurai02?tab=repositories" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-        Browse Repositories <span>→</span>
+      <a href="https://github.com/zurai02?tab=repositories" target="_blank" rel="noopener noreferrer" class="btn btn-primary magnetic-btn">
+        Browse Repositories <span class="btn-arrow">→</span>
       </a>
-      <a href="/" class="btn btn-ghost">Home</a>
+      <a href="/" class="btn btn-ghost magnetic-btn">Home</a>
     </div>
   </main>
 
@@ -201,7 +231,7 @@
       <h1>JavaScript Required</h1>
       <p>Please enable JavaScript to allow repository resolution and redirection.</p>
       <div class="actions">
-        <a href="https://github.com/zurai02?tab=repositories" class="btn btn-primary">View Repositories</a>
+        <a href="https://github.com/zurai02?tab=repositories" class="btn btn-primary">View Repositories →</a>
         <a href="/" class="btn btn-ghost">Home</a>
       </div>
     </main>
@@ -221,13 +251,34 @@
         if (tag) badgeText.textContent = tag;
         document.title = errTitle + " — zurai02";
         card.hidden = false;
+        initMagneticButtons();
       }
 
-      // Extract repository segment (e.g. zurai02.is-a.dev/luazi -> luazi)
+      // Magnetic mouse follow effect
+      function initMagneticButtons() {
+        var buttons = document.querySelectorAll(".magnetic-btn");
+        buttons.forEach(function (btn) {
+          btn.addEventListener("mousemove", function (e) {
+            btn.classList.remove("snapping");
+            var rect = btn.getBoundingClientRect();
+            var x = e.clientX - rect.left - rect.width / 2;
+            var y = e.clientY - rect.top - rect.height / 2;
+            // Moves the button slightly toward the pointer (factor of 0.28)
+            btn.style.transform = "translate(" + (x * 0.28) + "px, " + (y * 0.28) + "px)";
+          });
+
+          btn.addEventListener("mouseleave", function () {
+            btn.classList.add("snapping");
+            btn.style.transform = "translate(0px, 0px)";
+          });
+        });
+      }
+
+      // Check repository path
       var segments = window.location.pathname.split("/").filter(Boolean);
       var repoName = segments[0] || "";
 
-      // Only single segment paths are treated as potential repos
+      // Only single segment paths are valid repos
       if (segments.length !== 1 || !/^[A-Za-z0-9_.-]+$/.test(repoName) || repoName === "." || repoName === "..") {
         showError(
           "Page Not Found",
@@ -246,10 +297,10 @@
         window.location.replace(targetRepoUrl);
       }
 
-      // If GitHub API is delayed or unresponsive, fall back after 3.5s
+      // Fallback timer if GitHub API is delayed
       var timeoutTimer = setTimeout(redirect, 3500);
 
-      // Check strictly if the repo exists (no profile redirects)
+      // Check strictly against user repos (no profile fallback)
       fetch("https://api.github.com/repos/" + USER + "/" + encodeURIComponent(repoName))
         .then(function (res) {
           if (res.status === 404) {
@@ -263,7 +314,7 @@
             return null;
           }
           if (!res.ok) {
-            // If rate-limited (403/429) or other API issue, forward anyway
+            // Forward anyway on rate limits or API hiccups
             redirect();
             return null;
           }
