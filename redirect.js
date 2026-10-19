@@ -1,3 +1,7 @@
+//redirect.js
+
+
+
 (function() {
   'use strict';
   const PRIMARY_HOST = 'zurai02.is-a.dev';
