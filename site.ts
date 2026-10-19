@@ -2,6 +2,7 @@
  * site.ts — zurai02.github.io  (enhanced)
  * Compile: npx tsc --project tsconfig.json
  * NOTE: Particle canvas is owned by wasm.js — initParticles() kept as fallback only.
+ * Also drives 404.html (body.page-404) via initNotFound().
  */
 
 'use strict';
@@ -49,6 +50,11 @@ interface CounterConfig {
   interval: number;
 }
 
+interface NotFoundConfig {
+  user:            string;
+  redirectTimeout: number;
+}
+
 interface SiteConfig {
   particles: ParticleConfig;
   glow:      { lerp: number };
@@ -57,6 +63,7 @@ interface SiteConfig {
   counter:   CounterConfig;
   toast:     { duration: number };
   nav:       { scrollThreshold: number };
+  notFound:  NotFoundConfig;
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -100,6 +107,7 @@ const CFG: SiteConfig = {
   counter: { steps: 52, interval: 24 },
   toast:   { duration: 2400 },
   nav:     { scrollThreshold: 24 },
+  notFound: { user: 'zurai02', redirectTimeout: 3500 },
 };
 
 /* ════════════════════════════════════════════════════════════
@@ -662,12 +670,100 @@ function hintGPU(): void {
 }
 
 /* ════════════════════════════════════════════════════════════
+   404 PAGE  (repo resolver)
+   Used by 404.html. A single-segment path like /my-repo is checked
+   against the GitHub API and redirected to github.com/<user>/my-repo
+   if it exists; otherwise the error card is revealed.
+   ════════════════════════════════════════════════════════════ */
+
+function initNotFound(): void {
+  const card  = $('nf-card');
+  const title = $('nf-title');
+  const msg   = $('nf-msg');
+  const badge = $('nf-badge-text');
+  if (!card || !title || !msg || !badge) return;
+
+  const { user, redirectTimeout } = CFG.notFound;
+
+  const showError = (
+    errTitle: string,
+    tag: string,
+    buildMsg: (el: HTMLElement) => void,
+  ): void => {
+    title.textContent = errTitle;
+    badge.textContent = tag;
+    msg.textContent   = '';
+    buildMsg(msg);
+    document.title = `${errTitle} — ${user}`;
+    card.hidden = false;
+  };
+
+  const segments = location.pathname.split('/').filter(Boolean);
+  const repoName = segments[0] ?? '';
+
+  // Only single-segment, safe-looking paths can be repos
+  if (
+    segments.length !== 1 ||
+    !/^[A-Za-z0-9_.-]+$/.test(repoName) ||
+    repoName === '.' || repoName === '..'
+  ) {
+    showError('Page Not Found', '404 // INVALID_PATH', el => {
+      el.textContent = 'There is no repository or page at this path.';
+    });
+    return;
+  }
+
+  const targetUrl = `https://github.com/${user}/${encodeURIComponent(repoName)}`;
+  let resolved = false;
+
+  const redirect = (): void => {
+    if (resolved) return;
+    resolved = true;
+    location.replace(targetUrl);
+  };
+
+  // Fallback timer if the GitHub API is delayed
+  const timer = setTimeout(redirect, redirectTimeout);
+
+  // Check strictly against the user's repos (no profile fallback)
+  fetch(`https://api.github.com/repos/${user}/${encodeURIComponent(repoName)}`)
+    .then((res: Response): Promise<unknown> | null => {
+      if (res.status === 404) {
+        clearTimeout(timer);
+        resolved = true;
+        showError('Repository Not Found', '404 // REPO_NOT_FOUND', el => {
+          const code = document.createElement('span');
+          code.className   = 'nf-repo';
+          code.textContent = repoName;
+          el.append('No public repository matching ', code, ` was found on @${user}.`);
+        });
+        return null;
+      }
+      if (!res.ok) { redirect(); return null; } // rate limit / API hiccup: forward anyway
+      return res.json();
+    })
+    .then((data: unknown): void => {
+      if (!data) return;
+      clearTimeout(timer);
+      redirect();
+    })
+    .catch(redirect);
+}
+
+/* ════════════════════════════════════════════════════════════
    INIT
    ════════════════════════════════════════════════════════════ */
 
 function init(): void {
   const yr = $('yr');
   if (yr) yr.textContent = String(new Date().getFullYear());
+
+  // 404 page: only the pieces it needs (no welcome overlay, nav, terminal, etc.)
+  if (document.body.classList.contains('page-404')) {
+    initCursorGlow();
+    initNotFound();
+    return;
+  }
 
   // Inject active nav style
   const s = document.createElement('style');
@@ -719,4 +815,4 @@ if ('serviceWorker' in navigator) {
       })
       .catch((err: Error): void => console.warn('[SW] failed:', err));
   });
-}
+     }
