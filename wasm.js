@@ -18,6 +18,12 @@
  *     canvas there is what made the background flicker)
  */
 const WasmEngine = (() => {
+  // Files (engine.wat, pkg/) are resolved relative to THIS script, not the page.
+  // That way the engine still loads when the page is served from another path,
+  // e.g. the 404 page appearing at /some/missing/url. currentScript is only set
+  // while the script first runs, so it is captured here at the top.
+  const BASE = (document.currentScript && document.currentScript.src) || location.href;
+
   const LITE = !!(window.matchMedia && window.matchMedia("(max-width: 768px), (pointer: coarse)").matches);
   const REDUCED = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
@@ -235,7 +241,7 @@ const WasmEngine = (() => {
 
     // 2) engine.wat, compiled right here in the browser
     try {
-      const res = await fetch("engine.wat");
+      const res = await fetch(new URL("engine.wat", BASE));
       if (!res.ok) throw new Error("engine.wat HTTP " + res.status);
       const { instance } = await WebAssembly.instantiate(watToWasm(await res.text()));
       const x = instance.exports;
