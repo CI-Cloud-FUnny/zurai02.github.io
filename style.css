@@ -1,4 +1,3 @@
-
 /* ═══════════════════════════════════════════════════════════
    style.css — zurai02.is-a.dev (enhanced & refactored)
    ═══════════════════════════════════════════════════════════ */
@@ -1383,6 +1382,19 @@ body.page-404 {
   place-items: center;
   padding: 24px;
   position: relative;
+}
+
+/* The particle canvas is drawn by wasm.js only after its engine has loaded, so
+   without this it pops in abruptly while the card is already on screen, which
+   looks like the box flickering. Fade it in with CSS so the timing doesn't
+   depend on how fast the JS loads. */
+body.page-404 #bg-canvas {
+  opacity: 0;
+  animation: nf-bg-in 1s ease 0.25s forwards;
+}
+
+@keyframes nf-bg-in {
+  to { opacity: 1; }
 }
 
 /* Static ambient glow behind the card */
