@@ -1531,39 +1531,6 @@ body.page-404 #bg-canvas {
   outline-offset: 3px;
 }
 
-/* Quick links + tip under the buttons (no animation, no blur: static text) */
-.nf-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 18px;
-  margin-top: 20px;
-  font-size: 0.82rem;
-}
-
-.nf-links a {
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
-
-.nf-links a:hover {
-  color: var(--accent-hi);
-}
-
-.nf-card p.nf-hint {
-  margin: 14px 0 0;
-  font-size: 0.78rem;
-  line-height: 1.6;
-  color: var(--muted);
-}
-
-.nf-hint code {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.74rem;
-  color: var(--accent-hi);
-  overflow-wrap: anywhere;
-}
-
 /* Phones / touch screens: no backdrop blur over the animated particle canvas.
    A live blur over a canvas that redraws every frame is what left the card
    half-drawn on Android Chrome. This block must stay BELOW the base .nf-card
@@ -1598,4 +1565,74 @@ body.page-404 #bg-canvas {
 
 @media (prefers-reduced-motion: reduce) {
   .nf-card, .nf-dot { animation: none; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   LANGUAGE SWITCHER + RIGHT-TO-LEFT  (pairs with i18n.js)
+   ═══════════════════════════════════════════════════════════ */
+.lang-select {
+  max-width: 9.5rem;
+  padding: 0.32rem 0.6rem;
+  border: 1px solid var(--border-hi);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted);
+  font: 600 0.72rem 'JetBrains Mono', monospace;
+  color-scheme: dark;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.lang-select:hover {
+  color: var(--text);
+  border-color: var(--muted);
+}
+
+.lang-select:focus-visible {
+  outline: 2px solid var(--accent-hi);
+  outline-offset: 2px;
+}
+
+.lang-select option {
+  background: var(--bg-card);
+  color: var(--text);
+}
+
+/* The 404 page has no navbar, so the switcher sits in a corner */
+.lang-float {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+}
+
+/* Phones: logo | language | menu button */
+@media (max-width: 640px) {
+  nav .nav-right  { margin-inline-start: auto; margin-inline-end: 0.5rem; }
+  nav .nav-toggle { order: 3; }
+}
+
+/* Right-to-left languages (Arabic, Urdu) */
+[dir="rtl"] .lang-float { right: auto; left: 14px; }
+[dir="rtl"] .arr,
+[dir="rtl"] .btn-arrow { display: inline-block; transform: scaleX(-1); }
+[dir="rtl"] .btn:hover .btn-arrow { transform: scaleX(-1) translateX(3px); }
+[dir="rtl"] .link-card::after { right: auto; left: 1rem; }
+[dir="rtl"] .nav-links a::after { left: auto; right: 0; }
+
+/* Code, handles and badges always read left-to-right */
+[dir="rtl"] .tw-terminal,
+[dir="rtl"] code,
+[dir="rtl"] .mono,
+[dir="rtl"] .nf-tag,
+[dir="rtl"] .nf-repo,
+[dir="rtl"] .tag-lang {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* Joined / stacked scripts break apart with the tight tracking used on headings */
+:is(html:lang(ar), html:lang(ur), html:lang(hi), html:lang(bn), html:lang(th)) * {
+  letter-spacing: normal !important;
 }
