@@ -1358,8 +1358,7 @@ footer a:hover {
   .verify-block,
   .tw-terminal,
   #copy-toast,
-  .zc-panel,
-  .nf-card {
+  .zc-panel {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
@@ -1368,7 +1367,6 @@ footer a:hover {
   .link-card   { background: rgba(13, 18, 25, 0.90); }
   .tw-terminal { background: rgba(5, 8, 12, 0.96); }
   .zc-panel    { background: rgba(13, 18, 25, 0.98); }
-  .nf-card     { background: rgba(13, 18, 25, 0.94); }
 }
 
 
@@ -1512,6 +1510,26 @@ body.page-404 #bg-canvas {
 
 .btn:hover .btn-arrow {
   transform: translateX(3px);
+}
+
+/* Phones / touch screens: no backdrop blur over the animated particle canvas.
+   A live blur over a canvas that redraws every frame is what left the card
+   half-drawn on Android Chrome. This block must stay BELOW the base .nf-card
+   rule: both have the same specificity, so the later one wins (when it sat
+   in the performance block higher up, it was silently overridden). */
+@media (max-width: 768px), (pointer: coarse) {
+  .nf-card {
+    background: rgba(13, 18, 25, 0.94);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    animation: nf-fade 0.25s ease-out;   /* opacity only, no lingering layer */
+  }
+  .nf-actions .btn { will-change: auto; }
+}
+
+@keyframes nf-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
