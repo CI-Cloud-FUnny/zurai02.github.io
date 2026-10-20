@@ -219,8 +219,8 @@ function _showOverlay(greet: string): void {
 }
 
 /* ════════════════════════════════════════════════════════════
-   HAMBURGER MOBILE MENU
-   ════════════════════════════════════════════════════════════ */
+    HAMBURGER MOBILE MENU
+    ════════════════════════════════════════════════════════════ */
 
 function initMobileMenu(): void {
   const nav = $('nav');
@@ -252,8 +252,8 @@ function initMobileMenu(): void {
 }
 
 /* ════════════════════════════════════════════════════════════
-   NAV
-   ════════════════════════════════════════════════════════════ */
+    NAV
+    ════════════════════════════════════════════════════════════ */
 
 function initNav(): void {
   const nav = $('nav');
@@ -282,8 +282,8 @@ function initNav(): void {
 }
 
 /* ════════════════════════════════════════════════════════════
-   CURSOR GLOW + MAGNETIC BUTTONS
-   ════════════════════════════════════════════════════════════ */
+    CURSOR GLOW + MAGNETIC BUTTONS
+    ════════════════════════════════════════════════════════════ */
 
 function initCursorGlow(): void {
   const glow = $('cursor-glow');
@@ -325,8 +325,8 @@ function initCursorGlow(): void {
 }
 
 /* ════════════════════════════════════════════════════════════
-   CARD TILT  (3D perspective on hover)
-   ════════════════════════════════════════════════════════════ */
+    CARD TILT  (3D perspective on hover)
+    ════════════════════════════════════════════════════════════ */
 
 function initCardTilt(): void {
   if (isMob() || noMot()) return;
@@ -347,8 +347,8 @@ function initCardTilt(): void {
 }
 
 /* ════════════════════════════════════════════════════════════
-   PARTICLES  (fallback — wasm.js owns the canvas)
-   ════════════════════════════════════════════════════════════ */
+    PARTICLES  (fallback — wasm.js owns the canvas)
+    ════════════════════════════════════════════════════════════ */
 
 class Particle {
   x!: number; y!: number; r!: number; s!: number;
@@ -422,8 +422,8 @@ function initParticles(): void {
 }
 
 /* ════════════════════════════════════════════════════════════
-   HERO TYPEWRITER
-   ════════════════════════════════════════════════════════════ */
+    HERO TYPEWRITER
+    ════════════════════════════════════════════════════════════ */
 
 function initHeroTypewriter(): void {
   const el = $('hero-sub');
@@ -452,8 +452,8 @@ function initHeroTypewriter(): void {
 }
 
 /* ════════════════════════════════════════════════════════════
-   SCROLL REVEAL
-   ════════════════════════════════════════════════════════════ */
+    SCROLL REVEAL
+    ════════════════════════════════════════════════════════════ */
 
 function initScrollReveal(): void {
   const revealAll = (): void =>
@@ -487,8 +487,8 @@ function initScrollReveal(): void {
 }
 
 /* ════════════════════════════════════════════════════════════
-   COUNTERS
-   ════════════════════════════════════════════════════════════ */
+    COUNTERS
+    ════════════════════════════════════════════════════════════ */
 
 function initCounters(): void {
   const { steps, interval } = CFG.counter;
@@ -513,8 +513,8 @@ function initCounters(): void {
 }
 
 /* ════════════════════════════════════════════════════════════
-   DISCORD COPY + TOAST
-   ════════════════════════════════════════════════════════════ */
+    DISCORD COPY + TOAST
+    ════════════════════════════════════════════════════════════ */
 
 let _toastTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -559,8 +559,8 @@ function fallbackCopy(text: string): void {
 };
 
 /* ════════════════════════════════════════════════════════════
-   TERMINAL
-   ════════════════════════════════════════════════════════════ */
+    TERMINAL
+    ════════════════════════════════════════════════════════════ */
 
 const TW_LINES: TerminalLine[] = [
   {
@@ -641,8 +641,8 @@ function initTerminal(): void {
 }
 
 /* ════════════════════════════════════════════════════════════
-   BACK TO TOP
-   ════════════════════════════════════════════════════════════ */
+    BACK TO TOP
+    ════════════════════════════════════════════════════════════ */
 
 function initBackToTop(): void {
   const btn = document.createElement('button');
@@ -651,30 +651,30 @@ function initBackToTop(): void {
   btn.setAttribute('aria-label', 'Back to top');
   document.body.appendChild(btn);
 
-  window.addEventListener('scroll', (): void =>
-    btn.classList.toggle('show', scrollY > 500),
-  { passive: true });
+  window.addEventListener('scroll', (): void => {
+    btn.classList.toggle('show', scrollY > 500);
+  }, { passive: true });
 
   btn.addEventListener('click', (): void =>
     window.scrollTo({ top: 0, behavior: 'smooth' })
   );
 }
 
-/* ════════════════════════════════════════════════════════════
-   GPU HINTS
-   ════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════
+    GPU HINTS
+    ════════════════════════════════════════════════════ */
 
 function hintGPU(): void {
   document.querySelectorAll<HTMLElement>('.skill-card, .link-card, .tw-terminal')
     .forEach(el => { el.style.willChange = 'transform'; });
 }
 
-/* ════════════════════════════════════════════════════════════
-   404 PAGE  (repo resolver)
-   Used by 404.html. A single-segment path like /my-repo is checked
-   against the GitHub API and redirected to github.com/<user>/my-repo
-   if it exists; otherwise the error card is revealed.
-   ════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════
+    404 PAGE  (repo resolver)
+    Used by 404.html. A single-segment path like /my-repo is checked
+    against the GitHub API and redirected to github.com/<user>/my-repo
+    if it exists; otherwise the error card is revealed.
+    ════════════════════════════════════════════════════ */
 
 function initNotFound(): void {
   const card  = $('nf-card');
@@ -751,8 +751,8 @@ function initNotFound(): void {
 }
 
 /* ════════════════════════════════════════════════════════════
-   INIT
-   ════════════════════════════════════════════════════════════ */
+    INIT
+    ════════════════════════════════════════════════════ */
 
 function init(): void {
   const yr = $('yr');
@@ -797,8 +797,8 @@ document.readyState === 'loading'
   : init();
 
 /* ════════════════════════════════════════════════════════════
-   SERVICE WORKER
-   ════════════════════════════════════════════════════════════ */
+    SERVICE WORKER
+    ════════════════════════════════════════════════════ */
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', (): void => {
@@ -815,4 +815,4 @@ if ('serviceWorker' in navigator) {
       })
       .catch((err: Error): void => console.warn('[SW] failed:', err));
   });
-     }
+}
