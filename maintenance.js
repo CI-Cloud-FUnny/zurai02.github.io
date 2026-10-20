@@ -1,6 +1,6 @@
 /**
  * maintenance.js — zurai02.github.io
- * ─────────────────────────────────────────────────────────────────
+ * ────────────────────────────────────────────────────────────────
  * Maintenance mode system.
  *
  * HOW TO ACTIVATE:
@@ -19,56 +19,47 @@
  * BYPASS (admin access while site is down):
  *   Add ?admin=zurai02 to the URL.
  *   e.g. https://zurai02.github.io/?admin=zurai02
- * ─────────────────────────────────────────────────────────────────
+ * ────────────────────────────────────────────────────────────────
  */
 
 'use strict';
 
 const MAINTENANCE = {
-  enabled:       false,            // ← flip to true to activate
+  enabled:       false,
   message:       'Performing scheduled maintenance. Back soon.',
-  estimatedTime: '',               // e.g. '30 minutes' — leave blank to hide
-  adminKey:      'zurai02',        // URL param bypass: ?admin=zurai02
+  estimatedTime: '',
+  adminKey:      'zurai02',
   storageKey:    'zurai02_maintenance',
   bypassKey:     'zurai02_admin_bypass',
 };
 
 (function checkMaintenance() {
-  /* ── Admin bypass via URL param ── */
   const params = new URLSearchParams(window.location.search);
   if (params.get('admin') === MAINTENANCE.adminKey) {
     sessionStorage.setItem(MAINTENANCE.bypassKey, '1');
-    /* Clean the URL without reload */
     const clean = window.location.pathname;
     window.history.replaceState({}, '', clean);
   }
 
-  /* If bypassed this session, let site load normally */
   if (sessionStorage.getItem(MAINTENANCE.bypassKey)) return;
 
-  /* ── Check if maintenance is active ── */
   const forced   = localStorage.getItem(MAINTENANCE.storageKey) === 'true';
   const hardcode = MAINTENANCE.enabled;
 
   if (!forced && !hardcode) return;
 
-  /* ── Block the page immediately ── */
   _renderMaintenance();
 })();
 
 function _renderMaintenance() {
-  /* Prevent rest of page scripts from running */
   document.addEventListener('DOMContentLoaded', _mountOverlay, { once: true });
 
-  /* If DOM already ready, mount immediately */
   if (document.readyState !== 'loading') _mountOverlay();
 }
 
 function _mountOverlay() {
-  /* Hide all page content */
   document.body.style.overflow = 'hidden';
 
-  /* Build overlay */
   const overlay = document.createElement('div');
   overlay.id = 'maintenance-overlay';
 
@@ -110,7 +101,6 @@ function _mountOverlay() {
 
   document.body.appendChild(overlay);
 
-  /* Inject styles */
   const s = document.createElement('style');
   s.textContent = `
     #maintenance-overlay {
@@ -218,17 +208,9 @@ function _mountOverlay() {
   `;
   document.head.appendChild(s);
 
-  /* Auto-refresh every 60s to check if maintenance lifted */
   setTimeout(() => location.reload(), 60000);
 }
 
-/* ─────────────────────────────────────────────────────────────────
-   CONSOLE CONTROL API  (use in browser DevTools)
-   ─────────────────────────────────────────────────────────────────
-   Enable:   MAINT.enable()
-   Disable:  MAINT.disable()
-   Status:   MAINT.status()
-   ───────────────────────────────────────────────────────────────── */
 window.MAINT = {
   enable() {
     localStorage.setItem(MAINTENANCE.storageKey, 'true');

@@ -10,13 +10,13 @@
     "exactOptionalPropertyTypes": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "removeComments": false,
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["*.ts"],
+  "exclude": ["node_modules", "dist", "pkg"]
 }

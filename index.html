@@ -28,7 +28,6 @@
   <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="alternate icon" type="image/png" href="favicon.png" />
   <meta name="theme-color" content="#ff6b35" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -156,7 +155,7 @@
   </style>
 
   <!-- Maintenance check (non-blocking) -->
-  <script src="maintenance.js" async></script>
+  <script src="maintenance.js" defer></script>
 </head>
 
 <body>
@@ -210,7 +209,7 @@
       <p class="hero-sub" id="hero-sub"></p>
 
       <div class="hero-actions">
-        <a href="http://zurai02.is-a.dev/portfolio"
+        <a href="https://zurai02.is-a.dev/portfolio"
            target="_blank" rel="noopener noreferrer" class="btn btn-primary">
           DevForum Portfolio <span aria-hidden="true">→</span>
         </a>
@@ -353,7 +352,7 @@
       <h2 class="section-title reveal rd1" id="links-heading">Find me here</h2>
       <p class="section-sub reveal rd2">Portfolio, community, and contact.</p>
       <div class="link-grid">
-        <a href="http://zurai02.is-a.dev/portfolio"
+        <a href="https://zurai02.is-a.dev/portfolio"
            target="_blank" rel="noopener noreferrer" class="link-card reveal rd1">
           <svg class="link-icon" aria-hidden="true"><use href="#icon-portfolio"/></svg>
           <span class="link-name">Scripting Portfolio</span>
@@ -367,7 +366,6 @@
         </a>
         <a href="https://zurai02.is-a.dev/Blog"
            target="_blank" rel="noopener noreferrer" class="link-card reveal rd1">
-          <!-- Fixed duplicated icon: changed from #icon-github to #icon-portfolio -->
           <svg class="link-icon" aria-hidden="true"><use href="#icon-portfolio"/></svg>
           <span class="link-name">Blog</span>
           <span class="link-label">zurai02.is-a.dev/Blog</span>
