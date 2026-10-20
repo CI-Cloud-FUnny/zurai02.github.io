@@ -1512,6 +1512,58 @@ body.page-404 #bg-canvas {
   transform: translateX(3px);
 }
 
+/* Visually hidden, still read by screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Keyboard focus ring for everything clickable inside the card */
+.nf-card a:focus-visible {
+  outline: 2px solid var(--accent-hi);
+  outline-offset: 3px;
+}
+
+/* Quick links + tip under the buttons (no animation, no blur: static text) */
+.nf-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin-top: 20px;
+  font-size: 0.82rem;
+}
+
+.nf-links a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.nf-links a:hover {
+  color: var(--accent-hi);
+}
+
+.nf-card p.nf-hint {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.nf-hint code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem;
+  color: var(--accent-hi);
+  overflow-wrap: anywhere;
+}
+
 /* Phones / touch screens: no backdrop blur over the animated particle canvas.
    A live blur over a canvas that redraws every frame is what left the card
    half-drawn on Android Chrome. This block must stay BELOW the base .nf-card
