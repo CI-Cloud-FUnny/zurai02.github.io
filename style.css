@@ -1519,10 +1519,17 @@ body.page-404 #bg-canvas {
    in the performance block higher up, it was silently overridden). */
 @media (max-width: 768px), (pointer: coarse) {
   .nf-card {
-    background: rgba(13, 18, 25, 0.94);
+    background: rgba(13, 18, 25, 0.78);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
-    animation: nf-fade 0.25s ease-out;   /* opacity only, no lingering layer */
+    /* 1) fade in by opacity only (no lingering layer)
+       2) after the page and particle background have settled, switch a light
+          blur on ONCE (one step, no animated radius). Turning it on while the
+          background was still appearing is what made the card flicker.
+          To change the strength edit blur(5px) in the keyframes below;
+          set it to blur(0px) to turn the blur off again. */
+    animation: nf-fade 0.25s ease-out,
+               nf-blur-on 0.01s step-end 1.6s forwards;
   }
   .nf-actions .btn { will-change: auto; }
 }
@@ -1530,6 +1537,11 @@ body.page-404 #bg-canvas {
 @keyframes nf-fade {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+@keyframes nf-blur-on {
+  from { -webkit-backdrop-filter: none;      backdrop-filter: none; }
+  to   { -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
