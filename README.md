@@ -2,7 +2,7 @@
 
 Personal portfolio site for **zurai02** — Roblox Scripting & Engine Optimization Specialist.
 
-Live at **[zurai02.github.io](https://zurai02.github.io)**
+Live at **[zurai02.is-a.dev](zurai02.is-a.dev)**
 
 ---
 
