@@ -1,13 +1,19 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex" />
+  <meta name="description" content="Page not found on zurai02.is-a.dev. Repository links like zurai02.is-a.dev/repo-name redirect to the matching GitHub repository." />
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#ff6b35" />
   <title>404 — zurai02</title>
+
+  <!-- Icons / PWA, same files as index.html (root-relative so they work at any 404 path) -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="alternate icon" type="image/png" href="/favicon.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="apple-mobile-web-app-title" content="zurai02" />
 
   <!-- Fonts matching zurai02.is-a.dev -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -28,22 +34,35 @@
   <div class="nf-glow" aria-hidden="true"></div>
   <div id="cursor-glow" aria-hidden="true"></div>
 
-  <!-- Hidden while validating repo existence -->
-  <main class="nf-card" id="nf-card" hidden>
+  <!-- Hidden while validating repo existence; site.js reveals it (or redirects).
+       Do not rename the nf-* ids: initNotFound() looks them up. -->
+  <main class="nf-card" id="nf-card" aria-labelledby="nf-title" aria-describedby="nf-msg" hidden>
     <div class="nf-badge-row">
       <span class="nf-tag">
-        <span class="nf-dot"></span>
+        <span class="nf-dot" aria-hidden="true"></span>
         <span id="nf-badge-text">404 // NOT_FOUND</span>
       </span>
     </div>
     <h1 id="nf-title">Repository Not Found</h1>
     <p id="nf-msg"></p>
+
     <div class="nf-actions">
       <a href="https://github.com/zurai02?tab=repositories" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-        Browse Repositories <span class="btn-arrow">→</span>
+        Browse Repositories <span class="btn-arrow" aria-hidden="true">→</span>
+        <span class="sr-only">(opens in a new tab)</span>
       </a>
       <a href="/" class="btn btn-ghost">Home</a>
     </div>
+
+    <div class="nf-links" role="navigation" aria-label="Other places on this site">
+      <a href="/portfolio">Portfolio</a>
+      <a href="/Blog">Blog</a>
+      <a href="/github">GitHub</a>
+    </div>
+
+    <p class="nf-hint">
+      Tip: <code>zurai02.is-a.dev/&lt;repo-name&gt;</code> jumps straight to that repository on GitHub.
+    </p>
   </main>
 
   <noscript>
@@ -56,6 +75,11 @@
       <div class="nf-actions">
         <a href="https://github.com/zurai02?tab=repositories" class="btn btn-primary">View Repositories →</a>
         <a href="/" class="btn btn-ghost">Home</a>
+      </div>
+      <div class="nf-links" role="navigation" aria-label="Other places on this site">
+        <a href="/portfolio">Portfolio</a>
+        <a href="/Blog">Blog</a>
+        <a href="/github">GitHub</a>
       </div>
     </main>
   </noscript>
