@@ -1382,19 +1382,6 @@ body.page-404 {
   position: relative;
 }
 
-/* The particle canvas is drawn by wasm.js only after its engine has loaded, so
-   without this it pops in abruptly while the card is already on screen, which
-   looks like the box flickering. Fade it in with CSS so the timing doesn't
-   depend on how fast the JS loads. */
-body.page-404 #bg-canvas {
-  opacity: 0;
-  animation: nf-bg-in 1s ease 0.25s forwards;
-}
-
-@keyframes nf-bg-in {
-  to { opacity: 1; }
-}
-
 /* Static ambient glow behind the card */
 .nf-glow {
   position: fixed;
@@ -1414,14 +1401,16 @@ body.page-404 #bg-canvas {
   position: relative;
   z-index: 2;
   width: min(480px, 100%);
-  background: rgba(255, 255, 255, 0.03);
+  /* Solid background instead of backdrop-filter: blurring the animated
+     particle canvas behind the card forced a re-blur every frame, which
+     made the box flicker. The final state matches the natural state, so
+     the entry animation needs no fill-mode (no lingering compositor layer). */
+  background: rgba(13, 18, 25, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   padding: 34px 30px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
-  animation: nf-in 0.3s ease-out forwards;
+  animation: nf-in 0.3s ease-out;
 }
 
 @keyframes nf-in {
@@ -1512,127 +1501,6 @@ body.page-404 #bg-canvas {
   transform: translateX(3px);
 }
 
-/* Visually hidden, still read by screen readers */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* Keyboard focus ring for everything clickable inside the card */
-.nf-card a:focus-visible {
-  outline: 2px solid var(--accent-hi);
-  outline-offset: 3px;
-}
-
-/* Phones / touch screens: no backdrop blur over the animated particle canvas.
-   A live blur over a canvas that redraws every frame is what left the card
-   half-drawn on Android Chrome. This block must stay BELOW the base .nf-card
-   rule: both have the same specificity, so the later one wins (when it sat
-   in the performance block higher up, it was silently overridden). */
-@media (max-width: 768px), (pointer: coarse) {
-  .nf-card {
-    background: rgba(13, 18, 25, 0.78);
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-    /* 1) fade in by opacity only (no lingering layer)
-       2) after the page and particle background have settled, switch a light
-          blur on ONCE (one step, no animated radius). Turning it on while the
-          background was still appearing is what made the card flicker.
-          To change the strength edit blur(5px) in the keyframes below;
-          set it to blur(0px) to turn the blur off again. */
-    animation: nf-fade 0.25s ease-out,
-               nf-blur-on 0.01s step-end 1.6s forwards;
-  }
-  .nf-actions .btn { will-change: auto; }
-}
-
-@keyframes nf-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes nf-blur-on {
-  from { -webkit-backdrop-filter: none;      backdrop-filter: none; }
-  to   { -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .nf-card, .nf-dot { animation: none; }
-}
-
-
-/* ═══════════════════════════════════════════════════════════
-   LANGUAGE SWITCHER + RIGHT-TO-LEFT  (pairs with i18n.js)
-   ═══════════════════════════════════════════════════════════ */
-.lang-select {
-  max-width: 9.5rem;
-  padding: 0.32rem 0.6rem;
-  border: 1px solid var(--border-hi);
-  border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--muted);
-  font: 600 0.72rem 'JetBrains Mono', monospace;
-  color-scheme: dark;
-  cursor: pointer;
-  transition: color 0.15s ease, border-color 0.15s ease;
-}
-
-.lang-select:hover {
-  color: var(--text);
-  border-color: var(--muted);
-}
-
-.lang-select:focus-visible {
-  outline: 2px solid var(--accent-hi);
-  outline-offset: 2px;
-}
-
-.lang-select option {
-  background: var(--bg-card);
-  color: var(--text);
-}
-
-/* The 404 page has no navbar, so the switcher sits in a corner */
-.lang-float {
-  position: fixed;
-  top: 14px;
-  right: 14px;
-  z-index: 5;
-}
-
-/* Phones: logo | language | menu button */
-@media (max-width: 640px) {
-  nav .nav-right  { margin-inline-start: auto; margin-inline-end: 0.5rem; }
-  nav .nav-toggle { order: 3; }
-}
-
-/* Right-to-left languages (Arabic, Urdu) */
-[dir="rtl"] .lang-float { right: auto; left: 14px; }
-[dir="rtl"] .arr,
-[dir="rtl"] .btn-arrow { display: inline-block; transform: scaleX(-1); }
-[dir="rtl"] .btn:hover .btn-arrow { transform: scaleX(-1) translateX(3px); }
-[dir="rtl"] .link-card::after { right: auto; left: 1rem; }
-[dir="rtl"] .nav-links a::after { left: auto; right: 0; }
-
-/* Code, handles and badges always read left-to-right */
-[dir="rtl"] .tw-terminal,
-[dir="rtl"] code,
-[dir="rtl"] .mono,
-[dir="rtl"] .nf-tag,
-[dir="rtl"] .nf-repo,
-[dir="rtl"] .tag-lang {
-  direction: ltr;
-  unicode-bidi: isolate;
-}
-
-/* Joined / stacked scripts break apart with the tight tracking used on headings */
-:is(html:lang(ar), html:lang(ur), html:lang(hi), html:lang(bn), html:lang(th)) * {
-  letter-spacing: normal !important;
 }
